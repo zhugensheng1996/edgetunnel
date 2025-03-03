@@ -175,28 +175,30 @@ export default {
 					let pagesSum = UD;
 					let workersSum = UD;
 					let total = 24 * 1099511627776;
-
+					const pagesSum = UD; // 已上传流量
+					const workersSum = UD; // 已下载流量
+					const total = 100 * 1024 * 1024; // 总流量限制为 100M (100 * 1024 * 1024 字节)
+					
 					if (userAgent && userAgent.includes('mozilla')) {
-						return new Response(维列斯Config, {
-							status: 200,
-							headers: {
-								"Content-Type": "text/html;charset=utf-8",
-								"Profile-Update-Interval": "6",
-								"Subscription-Userinfo": `upload=${pagesSum}; download=${workersSum}; total=${total}; expire=${expire}`,
-								"Cache-Control": "no-store",
-							}
-						});
+   	 				    return new Response(维列斯Config, {
+        					status: 200,
+        					headers: {
+            						"Content-Type": "text/html;charset=utf-8",
+            						"Profile-Update-Interval": "6",
+            						"Subscription-Userinfo": `upload=${pagesSum}; download=${workersSum}; total=${total}; expire=${expire}`,
+            						"Cache-Control": "no-store",
+        						}
+    						});
 					} else {
-						return new Response(维列斯Config, {
-							status: 200,
-							headers: {
-								"Content-Disposition": `attachment; filename=${FileName}; filename*=utf-8''${encodeURIComponent(FileName)}`,
-								//"Content-Type": "text/plain;charset=utf-8",
-								"Profile-Update-Interval": "6",
-								"Subscription-Userinfo": `upload=${pagesSum}; download=${workersSum}; total=${total}; expire=${expire}`,
-							}
-						});
-					}
+    						return new Response(维列斯Config, {
+        						status: 200,
+        						headers: {
+            							"Content-Disposition": `attachment; filename=${FileName}; filename*=utf-8''${encodeURIComponent(FileName)}`,
+            							"Profile-Update-Interval": "6",
+            							"Subscription-Userinfo": `upload=${pagesSum}; download=${workersSum}; total=${total}; expire=${expire}`,
+        						}
+    						});
+					}	
 				} else {
 					if (env.URL302) return Response.redirect(env.URL302, 302);
 					else if (env.URL) return await 代理URL(env.URL, url);
